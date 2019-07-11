@@ -1,0 +1,67 @@
+#!/bin/bash
+
+pause(){
+  echo ""
+  read -n1 -rsp $'Press any key to continue or Ctrl+C to exit...\n'
+  clear
+}
+
+install_dependencies(){
+  echo "Install Depend"
+  sudo apt-get update 
+  sudo apt-get install -y build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils python3 libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-test-dev libboost-thread-dev
+  sudo apt install -y git
+  sudo apt-get instal -y  software-properties-common
+  sudo add-apt-repository -y ppa:bitcoin/bitcoin 
+  sudo apt-get update -y  
+  sudo apt-get install -y libdb4.8-dev libdb4.8++-dev
+  clear
+}
+
+build_syscoin(){
+  echo "Build"	
+  git clone http://www.github.com/syscoin/syscoin 
+  cd syscoin 
+  git checkout dev-4.x
+  git pull
+  ./autogen.sh 
+  ./configure
+  make -j$(nproc)
+  clear	
+}
+
+create_conf(){
+  echo "Creating Conf"
+  sudo mkdir ~/.syscoin
+  echo "$SYSCOIN_CONF" > ~/.syscoin/syscoin.conf
+  clear
+}
+
+start_syscoind(){
+  echo "Starting sycoind"
+  cd syscoin/src 
+  ./syscoind
+  clear
+}
+
+pause
+install_dependencies
+build_syscoin
+create_conf
+start_syscoind
+
+# syscoin conf file
+SYSCOIN_CONF=$(cat <<EOF
+# rpc config
+testnet=1
+[test]
+listen=1
+daemon=1
+server=1
+port=18369
+rpcport=18370
+gethtestnet=1
+addnode=54.190.239.153
+addnode=52.40.171.92
+EOF
+)
