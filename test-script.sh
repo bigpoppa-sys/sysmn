@@ -6,6 +6,44 @@ pause(){
   clear
 }
 
+update_system(){
+  echo "$MESSAGE_UPDATE"
+  # update package and upgrade Ubuntu
+  sudo DEBIAN_FRONTEND=noninteractive apt -y update
+  sudo DEBIAN_FRONTEND=noninteractive apt -y upgrade
+  sudo DEBIAN_FRONTEND=noninteractive apt -y autoremove
+  clear
+}
+
+maybe_prompt_for_swap_file(){
+  # Create swapfile if less than 8GB memory
+  MEMORY_RAM=$(free -m | awk '/^Mem:/{print $2}')
+  MEMORY_SWAP=$(free -m | awk '/^Swap:/{print $2}')
+  MEMORY_TOTAL=$(($MEMORY_RAM + $MEMORY_SWAP))
+  if [ $MEMORY_RAM -lt 3800 ]; then
+      echo "You need to upgrade your server to 4 GB RAM."
+       exit 1
+  fi
+  if [ $MEMORY_TOTAL -lt 7700 ]; then
+      CREATE_SWAP="Y";
+  fi
+}
+
+maybe_create_swap_file(){
+  if [ "$CREATE_SWAP" = "Y" ]; then
+    echo "Creating a 4GB swapfile..."
+    sudo swapoff -a
+    sudo dd if=/dev/zero of=/swap.img bs=1M count=4096
+    sudo chmod 600 /swap.img
+    sudo mkswap /swap.img
+    sudo swapon /swap.img
+    echo '/swap.img none swap sw 0 0' | sudo tee --append /etc/fstab > /dev/null
+    sudo mount -a
+    echo "Swapfile created."
+    clear
+  fi
+}
+
 install_dependencies(){
   echo "Install Depend"
   sudo apt-get update 
@@ -45,6 +83,9 @@ start_syscoind(){
 }
 
 pause
+update_system
+maybe_prompt_for_swap_file
+maybe_create_swap_file
 install_dependencies
 build_syscoin
 create_conf
