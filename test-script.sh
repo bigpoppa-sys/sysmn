@@ -6,6 +6,39 @@ pause(){
   clear
 }
 
+# syscoin conf file
+SYSCOIN_CONF=$(cat <<EOF
+#rpc config
+testnet=1
+[test]
+listen=1
+daemon=1
+server=1
+port=18369
+rpcport=18370
+gethtestnet=1
+addnode=54.190.239.153
+addnode=52.40.171.92
+EOF
+)
+
+# syscoind.service config
+SENTINEL_CONF=$(cat <<EOF
+# syscoin conf location
+syscoin_conf=/home/root/.syscoin/syscoin.conf
+# db connection details
+db_name=database/sentinel.db
+db_driver=sqlite
+network=mainnet
+EOF
+)
+
+# syscoind.service config
+CRON=$(cat <<EOF
+*/5 * * * * cd /home/root/syscoin/src/sentinel && ./venv/bin/python bin/sentinel.py 2>&1 >> sentinel-cron.log
+EOF
+)
+
 update_system(){
   echo "$MESSAGE_UPDATE"
   # update package and upgrade Ubuntu
@@ -44,6 +77,18 @@ maybe_create_swap_file(){
   fi
 }
 
+install_ufw(){
+  echo "$MESSAGE_UFW"
+  sudo apt-get install ufw -y
+  sudo ufw default deny incoming
+  sudo ufw default allow outgoing
+  sudo ufw allow ssh
+  sudo ufw allow 18369/tcp
+  sudo ufw allow 30303/tcp
+  yes | sudo ufw enable
+  clear
+}
+
 install_dependencies(){
   echo "Install Depend"
   sudo apt-get update 
@@ -76,33 +121,54 @@ create_conf(){
 }
 
 start_syscoind(){
-  echo "Starting sycoind"
-  cd syscoin/src 
-  ./syscoind
+	cd ~/syscoin/src
+	./syscoind
+}
+
+install_sentinel(){
+  echo "Install Sentinel"
+  cd ~/syscoin/src
+  git clone https://github.com/syscoin/sentinel.git
+  cd sentinel
+  git checkout main
+  echo "$SENTINEL_CONF" > ~/sentinel/sentinel.conf
+  clear
+}
+
+install_virtualenv(){
+  echo "Install Venv"
+  cd ~/sentinel
+  # install virtualenv
+  sudo apt-get install -y python-virtualenv virtualenv
+  # setup virtualenv
+  virtualenv venv
+  venv/bin/pip install -r requirements.txt
+  clear
+}
+
+setup_cron(){
+  crontab -l | { cat; echo "$CRON"; } | crontab -
   clear
 }
 
 pause
+#system updates
 update_system
 maybe_prompt_for_swap_file
 maybe_create_swap_file
+install_ufw
 install_dependencies
+
+#install syscoin
 build_syscoin
 create_conf
+
+#run
 start_syscoind
 
-# syscoin conf file
-SYSCOIN_CONF=$(cat <<EOF
-# rpc config
-testnet=1
-[test]
-listen=1
-daemon=1
-server=1
-port=18369
-rpcport=18370
-gethtestnet=1
-addnode=54.190.239.153
-addnode=52.40.171.92
-EOF
-)
+#install watchdog
+install_sentinel
+install_virtualenv
+setup_cron
+
+
