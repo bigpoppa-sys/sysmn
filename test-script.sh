@@ -1,11 +1,5 @@
 #!/bin/bash
 
-pause(){
-  echo ""
-  read -n1 -rsp $'Press any key to continue or Ctrl+C to exit...\n'
-  clear
-}
-
 # syscoin conf file
 SYSCOIN_CONF=$(cat <<EOF
 #rpc config
@@ -38,6 +32,12 @@ CRON=$(cat <<EOF
 */5 * * * * cd /home/root/syscoin/src/sentinel && ./venv/bin/python bin/sentinel.py 2>&1 >> sentinel-cron.log
 EOF
 )
+
+pause(){
+  echo ""
+  read -n1 -rsp $'Press any key to continue or Ctrl+C to exit...\n'
+  clear
+}
 
 update_system(){
   echo "$MESSAGE_UPDATE"
@@ -170,5 +170,3 @@ start_syscoind
 install_sentinel
 install_virtualenv
 setup_cron
-
-
