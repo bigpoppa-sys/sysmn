@@ -1,0 +1,33 @@
+Run test node
+1. Install VPS and login as root.
+2. run following script 
+	bash <(curl -sL https://raw.githubusercontent.com/bigpoppa-sys/sysmn/master/test-script.sh)
+3. Once finished
+	cd syscoin/src
+	./syscoin-cli getnewaddress <label> legacy
+4. Go to testnet channel and get your 100k sys.
+5. Then back to VPS
+	~./syscoin-cli masternode genkey
+	~./syscoin-cli listtransactions
+	~./syscoin-cli masternode outputs
+	~./syscoin-cli stop
+	nano ~/.syscoin/syscoin.conf
+	
+	Add the following changing specs
+	
+	# masternode config
+	masternode=1
+	masternodeprivkey=7ra1rhngvNkhkiFE8STrmvH3LvYTCzLyRFHFsZvrJUBV6ZmWnc
+	externalip=123.123.123.123
+
+	Then
+	nano ~/.syscoin/testnet3/masternode.conf
+	Add in the usual 
+	mn1 xxx.xxx.xx.xxx:18369 genkey txOutput Index
+
+	Then
+	~./syscoind
+	Wait for sync
+	~./syscoin-cli mnsync status
+	Start Node
+	~./syscoin-cli masternode start-all
