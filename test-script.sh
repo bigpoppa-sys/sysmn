@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# to run script simply paste
+# bash <(curl -sL https://raw.githubusercontent.com/bigpoppa-sys/sysmn/master/test-script.sh)
+
 # syscoin conf file
 SYSCOIN_CONF=$(cat <<EOF
 #rpc config
