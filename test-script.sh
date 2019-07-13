@@ -116,14 +116,6 @@ build_syscoin(){
   clear	
 }
 
-make_install() {
-  echo "Make Install"
-  # install the binaries to /usr/local/bin
-  cd ~/syscoin
-  sudo make install
-  clear
-}
-
 create_conf(){
   echo "Creating Conf"
   sudo mkdir ~/.syscoin
@@ -172,7 +164,6 @@ install_dependencies
 
 #install syscoin
 build_syscoin
-make_install
 create_conf
 
 #run
