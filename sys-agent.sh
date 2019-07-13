@@ -117,8 +117,8 @@ create_conf(){
 }
 
 start_syscoind(){
-	cd ~/syscoin/src
-	./syscoind
+	cd
+	syscoind
 }
 
 pause
