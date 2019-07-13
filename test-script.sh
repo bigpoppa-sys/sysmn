@@ -22,7 +22,7 @@ EOF
 # syscoind.service config
 SENTINEL_CONF=$(cat <<EOF
 # syscoin conf location
-syscoin_conf=/home/root/.syscoin/syscoin.conf
+syscoin_conf=/root/.syscoin/syscoin.conf
 # db connection details
 db_name=database/sentinel.db
 db_driver=sqlite
