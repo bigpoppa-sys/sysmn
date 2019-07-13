@@ -32,7 +32,7 @@ EOF
 
 # syscoind.service config
 CRON=$(cat <<EOF
-*/5 * * * * cd /home/root/syscoin/src/sentinel && ./venv/bin/python bin/sentinel.py 2>&1 >> sentinel-cron.log
+*/5 * * * * cd /root/syscoin/src/sentinel && ./venv/bin/python bin/sentinel.py 2>&1 >> sentinel-cron.log
 EOF
 )
 
