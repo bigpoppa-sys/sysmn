@@ -18,6 +18,7 @@ addnode=54.190.239.153
 addnode=52.40.171.92
 rpcuser=u
 rpcpassword=p
+assetindex=1
 EOF
 )
 
