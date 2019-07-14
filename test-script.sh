@@ -93,14 +93,21 @@ install_ufw(){
 }
 
 install_dependencies(){
-  echo "Install Depend"
-  sudo apt-get update 
-  sudo apt-get install -y build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils python3 libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-test-dev libboost-thread-dev
+  echo "Installing Dependencies"
+  # build tools
+  sudo apt install -y build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils python3 software-properties-common
+  # boost
+  sudo apt install -y libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev libboost-iostreams-dev
+  # bdb 4.8
+  sudo add-apt-repository -y ppa:bitcoin/bitcoin
+  sudo apt update -y
+  sudo apt install -y libdb4.8-dev libdb4.8++-dev
+  # zmq
+  sudo apt install -y libzmq3-dev
+  # git
   sudo apt install -y git
-  sudo apt-get instal -y  software-properties-common
-  sudo add-apt-repository -y ppa:bitcoin/bitcoin 
-  sudo apt-get update -y  
-  sudo apt-get install -y libdb4.8-dev libdb4.8++-dev
+  # virtualenv python
+  sudo apt install -y python-virtualenv
   clear
 }
 
@@ -124,8 +131,8 @@ create_conf(){
 }
 
 start_syscoind(){
-	cd ~/syscoin/src
-	./syscoind
+  cd ~/syscoin/src
+  ./syscoind
 }
 
 install_sentinel(){
