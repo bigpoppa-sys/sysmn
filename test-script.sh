@@ -133,7 +133,7 @@ install_sentinel(){
   cd ~/syscoin/src
   git clone https://github.com/syscoin/sentinel.git
   cd sentinel
-  git checkout main
+  git checkout master
   echo "$SENTINEL_CONF" > ~/syscoin/src/sentinel/sentinel.conf
   clear
 }
