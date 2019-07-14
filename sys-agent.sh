@@ -29,7 +29,7 @@ pause(){
 }
 
 update_system(){
-  echo "$MESSAGE_UPDATE"
+  echo "Updating System"
   # update package and upgrade Ubuntu
   sudo DEBIAN_FRONTEND=noninteractive apt -y update
   sudo DEBIAN_FRONTEND=noninteractive apt -y upgrade
@@ -67,7 +67,7 @@ maybe_create_swap_file(){
 }
 
 install_ufw(){
-  echo "$MESSAGE_UFW"
+  echo "Installing UFW"
   sudo apt-get install ufw -y
   sudo ufw default deny incoming
   sudo ufw default allow outgoing
