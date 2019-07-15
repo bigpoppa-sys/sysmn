@@ -8,11 +8,15 @@ SYSCOIN_CONF=$(cat <<EOF
 #rpc config
 testnet=1
 [test]
+rpcuser=user
+rpcpassword=password
 listen=1
 daemon=1
 server=1
+assetindex=1
 port=18369
 rpcport=18370
+rpcallowip=127.0.0.1
 gethtestnet=1
 addnode=54.190.239.153
 addnode=52.40.171.92
@@ -33,6 +37,7 @@ EOF
 # syscoind.service config
 CRON=$(cat <<EOF
 */5 * * * * cd /root/syscoin/src/sentinel && ./venv/bin/python bin/sentinel.py 2>&1 >> sentinel-cron.log
+@reboot /root/syscoin/src/syscoind -daemon >/dev/null 2>&1
 EOF
 )
 
