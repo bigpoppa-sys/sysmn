@@ -90,6 +90,14 @@ install_dependencies(){
   clear
 }
 
+make_clean(){
+  echo "Running Clean Up"
+  cd ~/syscoin
+  sudo make uninstall
+  sudo make clean
+  clear
+}
+
 git_clone_repository(){
   echo "$MESSAGE_CLONING"
   cd
@@ -221,6 +229,8 @@ stop_syscoind(){
 upgrade() {
   syscoin_branch      # ask which branch to use
   clear
+  stop_syscoind       # stop syscoind if it is running
+  make_clean
   install_dependencies # make sure we have the latest deps
   update_system       # update all the system libraries
   git_checkout_branch # check out our branch
@@ -228,7 +238,6 @@ upgrade() {
   autogen             # run ./autogen.sh
   configure           # run ./configure
   compile             # make and make install
-  stop_syscoind       # stop syscoind if it is running
   make_install        # install the binaries
 
   # maybe upgrade sentinel
