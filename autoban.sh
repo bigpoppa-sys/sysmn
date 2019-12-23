@@ -49,7 +49,8 @@ start_syscoind(){
 }
 
 remove_geth(){
-	rm -rf /home/syscoin/.syscoin/geth
+  echo "Removing Geth"
+  rm -rf /home/syscoin/.syscoin/geth
 }
 
 stop_syscoind
