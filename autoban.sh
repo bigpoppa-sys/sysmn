@@ -34,3 +34,24 @@ END {
 	}
     }
 }'
+
+stop_syscoind(){
+  echo "Stopping"
+  sudo service syscoind stop
+  clear
+}
+
+start_syscoind(){
+  echo "Starting Syscoin"
+  sudo service syscoind start     # start the service
+  sudo systemctl enable syscoind  # enable at boot
+  clear
+}
+
+remove_geth(){
+	rm -rf /home/syscoin/.syscoin/geth
+}
+
+stop_syscoind
+remove_geth
+start_syscoind
