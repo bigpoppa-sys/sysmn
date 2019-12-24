@@ -2,6 +2,7 @@
 # Connects to 4.1 nodes only
 
 ADDNODES=$(cat <<EOF
+
 connect=104.238.159.17
 connect=104.248.16.65
 connect=104.248.32.242
